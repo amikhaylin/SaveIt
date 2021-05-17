@@ -12,21 +12,26 @@ struct ContentView: View {
     @State private var showingEditScreen = false
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
+    @State private var currentRecordIndex = 0
     
     var body: some View {
         NavigationView {
             ZStack {
                 List {
-                    ForEach (records.items) { record in
-                        HStack {
-                            Image(uiImage: record.image!)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 100, height: 100)
-                            
-                            Text(record.description)
+                    ForEach (records.items.sorted()) { record in
+                        NavigationLink(
+                            destination: EditView(records: records, index: records.items.lastIndex(of: record)!)) {
+                            HStack {
+                                Image(uiImage: record.image!)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 100, height: 100)
+                                
+                                Text(record.description)
+                            }
                         }
                     }
+                    .onDelete(perform: removeRecord)
                 }
                 .navigationBarTitle("SaveIt")
              
@@ -55,7 +60,7 @@ struct ContentView: View {
         }
 //        .onAppear(perform: loadData)
         .sheet(isPresented: $showingEditScreen) {
-            EditView(records: self.records)
+            EditView(records: self.records, index: self.currentRecordIndex)
         }
         .sheet(isPresented: $showingImagePicker, onDismiss: createRecord) {
             ImagePicker(image: self.$inputImage)
@@ -66,9 +71,14 @@ struct ContentView: View {
         if let image = self.inputImage {
             let newRecord = Record(id: UUID(), date: Date(), description: "", imageName: UUID().uuidString, image: image)
             records.items.append(newRecord)
+            currentRecordIndex = records.items.lastIndex(of: newRecord)!
             
             self.showingEditScreen = true
         }
+    }
+    
+    func removeRecord(at offset: IndexSet) {
+        records.items.remove(atOffsets: offset)
     }
     
     func getDocumentDirectory() -> URL {
