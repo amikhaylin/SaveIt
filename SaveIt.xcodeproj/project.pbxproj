@@ -11,6 +11,10 @@
 		4D7C3F7E264A7BD00049F22A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7C3F7D264A7BD00049F22A /* ContentView.swift */; };
 		4D7C3F80264A7BD30049F22A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D7C3F7F264A7BD30049F22A /* Assets.xcassets */; };
 		4D7C3F83264A7BD30049F22A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D7C3F82264A7BD30049F22A /* Preview Assets.xcassets */; };
+		4DF93556264BB926007FDD57 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF93555264BB926007FDD57 /* Record.swift */; };
+		4DF93558264BBB40007FDD57 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4DF93557264BBB40007FDD57 /* README.md */; };
+		4DF9355A264BC0D5007FDD57 /* EditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF93559264BC0D5007FDD57 /* EditView.swift */; };
+		4DF9355F264E6F26007FDD57 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DF9355E264E6F26007FDD57 /* ImagePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +24,10 @@
 		4D7C3F7F264A7BD30049F22A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D7C3F82264A7BD30049F22A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4D7C3F84264A7BD30049F22A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4DF93555264BB926007FDD57 /* Record.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Record.swift; sourceTree = "<group>"; };
+		4DF93557264BBB40007FDD57 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4DF93559264BC0D5007FDD57 /* EditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditView.swift; sourceTree = "<group>"; };
+		4DF9355E264E6F26007FDD57 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +44,7 @@
 		4D7C3F6F264A7BD00049F22A = {
 			isa = PBXGroup;
 			children = (
+				4DF93557264BBB40007FDD57 /* README.md */,
 				4D7C3F7A264A7BD00049F22A /* SaveIt */,
 				4D7C3F79264A7BD00049F22A /* Products */,
 			);
@@ -54,6 +63,9 @@
 			children = (
 				4D7C3F7B264A7BD00049F22A /* SaveItApp.swift */,
 				4D7C3F7D264A7BD00049F22A /* ContentView.swift */,
+				4DF9355E264E6F26007FDD57 /* ImagePicker.swift */,
+				4DF93559264BC0D5007FDD57 /* EditView.swift */,
+				4DF93555264BB926007FDD57 /* Record.swift */,
 				4D7C3F7F264A7BD30049F22A /* Assets.xcassets */,
 				4D7C3F84264A7BD30049F22A /* Info.plist */,
 				4D7C3F81264A7BD30049F22A /* Preview Content */,
@@ -79,6 +91,7 @@
 				4D7C3F74264A7BD00049F22A /* Sources */,
 				4D7C3F75264A7BD00049F22A /* Frameworks */,
 				4D7C3F76264A7BD00049F22A /* Resources */,
+				4DF9355D264D091B007FDD57 /* TODO Finder */,
 			);
 			buildRules = (
 			);
@@ -126,12 +139,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DF93558264BBB40007FDD57 /* README.md in Resources */,
 				4D7C3F83264A7BD30049F22A /* Preview Assets.xcassets in Resources */,
 				4D7C3F80264A7BD30049F22A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4DF9355D264D091B007FDD57 /* TODO Finder */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "TODO Finder";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\nERRORTAG=\"ERROR:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$|($ERRORTAG).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\" | perl -p -e \"s/($ERRORTAG)/ error: \\$1/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4D7C3F74264A7BD00049F22A /* Sources */ = {
@@ -140,6 +175,9 @@
 			files = (
 				4D7C3F7E264A7BD00049F22A /* ContentView.swift in Sources */,
 				4D7C3F7C264A7BD00049F22A /* SaveItApp.swift in Sources */,
+				4DF9355F264E6F26007FDD57 /* ImagePicker.swift in Sources */,
+				4DF9355A264BC0D5007FDD57 /* EditView.swift in Sources */,
+				4DF93556264BB926007FDD57 /* Record.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
