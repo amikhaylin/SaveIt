@@ -20,7 +20,7 @@ struct ContentView: View {
                 List {
                     ForEach (records.items.sorted()) { record in
                         NavigationLink(
-                            destination: EditView(records: records, index: records.items.lastIndex(of: record)!)) {
+                            destination: PictureView(records: records, index: records.items.lastIndex(of: record)!)) {
                             HStack {
                                 Image(uiImage: record.image!)
                                     .resizable()
@@ -58,8 +58,8 @@ struct ContentView: View {
                 }
             }
         }
-//        .onAppear(perform: loadData)
-        .sheet(isPresented: $showingEditScreen) {
+        .onAppear(perform: loadData)
+        .sheet(isPresented: $showingEditScreen, onDismiss: saveData) {
             EditView(records: self.records, index: self.currentRecordIndex)
         }
         .sheet(isPresented: $showingImagePicker, onDismiss: createRecord) {
@@ -69,7 +69,7 @@ struct ContentView: View {
     
     func createRecord() {
         if let image = self.inputImage {
-            let newRecord = Record(id: UUID(), date: Date(), description: "", imageName: UUID().uuidString, image: image)
+            let newRecord = Record(id: UUID(), date: Date(), description: "", imageName: nil, image: image)
             records.items.append(newRecord)
             currentRecordIndex = records.items.lastIndex(of: newRecord)!
             
@@ -86,27 +86,50 @@ struct ContentView: View {
         return paths[0]
     }
     
-//    func loadData() {
-//        let filename = getDocumentDirectory().appendingPathComponent("SavedData")
-//
-//        do {
-//            let data = try Data(contentsOf: filename)
-//            records.items = try JSONDecoder().decode([Record].self, from: data)
-//        } catch {
-//            print("Unable to load saved data.")
-//        }
-//    }
-//
-//    func saveData() {
-//        do {
-//            let filename = getDocumentDirectory().appendingPathComponent("SavedData")
-//            let data = try JSONEncoder().encode(self.records.items)
-//            try data.write(to: filename, options: [.atomicWrite, .completeFileProtection])
-//
-//        } catch {
-//            print("Unable to save data.")
-//        }
-//    }
+    func loadData() {
+        let filename = getDocumentDirectory().appendingPathComponent("SavedData")
+
+        do {
+            let data = try Data(contentsOf: filename)
+            records.items = try JSONDecoder().decode([Record].self, from: data)
+        } catch {
+            print("Unable to load saved data.")
+        }
+        
+        for index in 0..<records.items.count {
+            do {
+                let imageData = try Data(contentsOf: getDocumentDirectory().appendingPathComponent(records.items[index].imageName!))
+                records.items[index].image = UIImage(data: imageData)
+            } catch {
+                print("Error loading image for \(index)")
+            }
+        }
+    }
+
+    func saveData() {
+        //Saving photos
+        for index in 0..<records.items.count {
+            if records.items[index].imageName == nil {
+                let imageName = UUID().uuidString
+                
+                if let image =  records.items[index].image {
+                    if let jpegData = image.jpegData(compressionQuality: 0.8) {
+                        try? jpegData.write(to: getDocumentDirectory().appendingPathComponent(imageName), options: [.atomicWrite, .completeFileProtection])
+                        records.items[index].imageName = imageName
+                    }
+                }
+            }
+        }
+        
+        do {
+            let filename = getDocumentDirectory().appendingPathComponent("SavedData")
+            let data = try JSONEncoder().encode(self.records.items)
+            try data.write(to: filename, options: [.atomicWrite, .completeFileProtection])
+
+        } catch {
+            print("Unable to save data.")
+        }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
