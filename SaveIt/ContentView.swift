@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var showingImagePicker = false
     @State private var inputImage: UIImage?
     @State private var currentRecordIndex = 0
+    @State private var imageSource = UIImagePickerController.SourceType.photoLibrary
     
     var body: some View {
         NavigationView {
@@ -53,6 +54,23 @@ struct ContentView: View {
                                 .clipShape(Circle())
                                 .padding([.bottom, .trailing])
                         }
+                        .contextMenu {
+                            Button(action: {
+                                self.imageSource = UIImagePickerController.SourceType.camera
+                                self.showingImagePicker = true
+                            }, label: {
+                                Text("Camera")
+                                Image(systemName: "camera")
+                            })
+                            
+                            Button(action: {
+                                self.imageSource = UIImagePickerController.SourceType.photoLibrary
+                                self.showingImagePicker = true
+                            }, label: {
+                                Text("Photo library")
+                                Image(systemName: "photo.on.rectangle")
+                            })
+                        }
                     }
 
                 }
@@ -63,7 +81,7 @@ struct ContentView: View {
             EditView(records: self.records, index: self.currentRecordIndex)
         }
         .sheet(isPresented: $showingImagePicker, onDismiss: createRecord) {
-            ImagePicker(image: self.$inputImage)
+            ImagePicker(image: self.$inputImage, imageSource: self.imageSource)
         }
     }
     

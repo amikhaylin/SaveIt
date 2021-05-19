@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4D4E863826541CD2007E4B63 /* PictureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E863726541CD2007E4B63 /* PictureView.swift */; };
+		4D4E863A2654F97C007E4B63 /* MKPointAnnotation-Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D4E86392654F97C007E4B63 /* MKPointAnnotation-Codable.swift */; };
 		4D7C3F7C264A7BD00049F22A /* SaveItApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7C3F7B264A7BD00049F22A /* SaveItApp.swift */; };
 		4D7C3F7E264A7BD00049F22A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7C3F7D264A7BD00049F22A /* ContentView.swift */; };
 		4D7C3F80264A7BD30049F22A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D7C3F7F264A7BD30049F22A /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		4D4E863726541CD2007E4B63 /* PictureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureView.swift; sourceTree = "<group>"; };
+		4D4E86392654F97C007E4B63 /* MKPointAnnotation-Codable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MKPointAnnotation-Codable.swift"; sourceTree = "<group>"; };
 		4D7C3F78264A7BD00049F22A /* SaveIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaveIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D7C3F7B264A7BD00049F22A /* SaveItApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItApp.swift; sourceTree = "<group>"; };
 		4D7C3F7D264A7BD00049F22A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -69,6 +71,7 @@
 				4DF93559264BC0D5007FDD57 /* EditView.swift */,
 				4D4E863726541CD2007E4B63 /* PictureView.swift */,
 				4DF93555264BB926007FDD57 /* Record.swift */,
+				4D4E86392654F97C007E4B63 /* MKPointAnnotation-Codable.swift */,
 				4D7C3F7F264A7BD30049F22A /* Assets.xcassets */,
 				4D7C3F84264A7BD30049F22A /* Info.plist */,
 				4D7C3F81264A7BD30049F22A /* Preview Content */,
@@ -176,6 +179,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D4E863A2654F97C007E4B63 /* MKPointAnnotation-Codable.swift in Sources */,
 				4D7C3F7E264A7BD00049F22A /* ContentView.swift in Sources */,
 				4D7C3F7C264A7BD00049F22A /* SaveItApp.swift in Sources */,
 				4DF9355F264E6F26007FDD57 /* ImagePicker.swift in Sources */,
