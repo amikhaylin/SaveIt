@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var inputImage: UIImage?
     @State private var currentRecordIndex = 0
     @State private var imageSource = UIImagePickerController.SourceType.photoLibrary
+    @State private var locationFetcher = LocationFetcher()
     
     var body: some View {
         NavigationView {
@@ -21,7 +22,7 @@ struct ContentView: View {
                 List {
                     ForEach (records.items.sorted()) { record in
                         NavigationLink(
-                            destination: PictureView(records: records, index: records.items.lastIndex(of: record)!)) {
+                            destination: PictureView(records: records, index: records.items.lastIndex(of: record)!, locationFetcher: self.locationFetcher)) {
                             HStack {
                                 Image(uiImage: record.image!)
                                     .resizable()
@@ -76,8 +77,8 @@ struct ContentView: View {
                 }
             }
         }
-        .onAppear(perform: loadData)
-        .sheet(isPresented: $showingEditScreen, onDismiss: saveData) {
+        .onAppear(perform: startUp)
+        .sheet(isPresented: $showingEditScreen) {
             EditView(records: self.records, index: self.currentRecordIndex)
         }
         .sheet(isPresented: $showingImagePicker, onDismiss: createRecord) {
@@ -87,7 +88,13 @@ struct ContentView: View {
     
     func createRecord() {
         if let image = self.inputImage {
-            let newRecord = Record(id: UUID(), date: Date(), description: "", imageName: nil, image: image)
+            var newRecord = Record(id: UUID(), date: Date(), description: "", imageName: nil, image: image)
+            
+            if let location = locationFetcher.lastKnownLocation {
+                newRecord.latitude = location.latitude
+                newRecord.longitude = location.longitude
+            }
+
             records.items.append(newRecord)
             currentRecordIndex = records.items.lastIndex(of: newRecord)!
             
@@ -96,57 +103,11 @@ struct ContentView: View {
     }
     
     func removeRecord(at offset: IndexSet) {
-        records.items.remove(atOffsets: offset)
+        records.remove(at: offset)
     }
     
-    func getDocumentDirectory() -> URL {
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        return paths[0]
-    }
-    
-    func loadData() {
-        let filename = getDocumentDirectory().appendingPathComponent("SavedData")
-
-        do {
-            let data = try Data(contentsOf: filename)
-            records.items = try JSONDecoder().decode([Record].self, from: data)
-        } catch {
-            print("Unable to load saved data.")
-        }
-        
-        for index in 0..<records.items.count {
-            do {
-                let imageData = try Data(contentsOf: getDocumentDirectory().appendingPathComponent(records.items[index].imageName!))
-                records.items[index].image = UIImage(data: imageData)
-            } catch {
-                print("Error loading image for \(index)")
-            }
-        }
-    }
-
-    func saveData() {
-        //Saving photos
-        for index in 0..<records.items.count {
-            if records.items[index].imageName == nil {
-                let imageName = UUID().uuidString
-                
-                if let image =  records.items[index].image {
-                    if let jpegData = image.jpegData(compressionQuality: 0.8) {
-                        try? jpegData.write(to: getDocumentDirectory().appendingPathComponent(imageName), options: [.atomicWrite, .completeFileProtection])
-                        records.items[index].imageName = imageName
-                    }
-                }
-            }
-        }
-        
-        do {
-            let filename = getDocumentDirectory().appendingPathComponent("SavedData")
-            let data = try JSONEncoder().encode(self.records.items)
-            try data.write(to: filename, options: [.atomicWrite, .completeFileProtection])
-
-        } catch {
-            print("Unable to save data.")
-        }
+    func startUp() {
+        self.locationFetcher.start()
     }
 }
 
