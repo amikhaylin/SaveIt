@@ -29,7 +29,7 @@ struct EditView: View {
             .navigationBarItems(trailing: Button("Save") {
 
                 records.items[index].description = self.description
-                        
+                records.save()
                 self.presentationMode.wrappedValue.dismiss()
             })
         }

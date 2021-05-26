@@ -13,6 +13,7 @@ struct PictureView: View {
     @State private var description = ""
     @ObservedObject var records: Records
     var index: Int
+    var locationFetcher: LocationFetcher
     
     var body: some View {
         ZStack {
@@ -22,7 +23,6 @@ struct PictureView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack {
-
                 Spacer()
                 
                 Text(records.items[index].description)
@@ -31,12 +31,17 @@ struct PictureView: View {
                     .font(.title)
                     .padding([.bottom, .trailing])
             }
+            .navigationBarItems(trailing: NavigationLink(destination: MapView(latitude: records.items[index].latitude, longitude: records.items[index].longitude, title: records.items[index].description, showingPlaceDetails: true)
+                                                            .edgesIgnoringSafeArea(.all)) {
+                Image(systemName: "map")
+                    .foregroundColor(.white)
+            })
         }
     }
 }
 
 struct PictureView_Previews: PreviewProvider {
     static var previews: some View {
-        PictureView(records: Records(), index: 0)
+        PictureView(records: Records(), index: 0, locationFetcher: LocationFetcher())
     }
 }

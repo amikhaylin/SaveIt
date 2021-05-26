@@ -48,5 +48,7 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We want to import your photos</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need location to add it to your photos</string>
 </dict>
 </plist>
